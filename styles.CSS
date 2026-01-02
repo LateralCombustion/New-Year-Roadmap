@@ -1,0 +1,423 @@
+/* =========================================================
+FILE: styles.css
+PROJECT: Erlend 2026 Roadmap (Roadmap Simulator)
+ANCHOR SYSTEM: SECTION / PART
+========================================================= */
+
+/* ===== [CSS::SECTION A] Base ===== */
+:root{
+  --accent-orange: #ff7a00;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: #050505;
+  color: #e9e9e9;
+
+  /* optional background image (set via Options) */
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* Make ALL headline/header labels orange (release styling) */
+.progressBlock__title,
+.dailyPanel__title,
+.cat__title,
+.modal__title,
+.toolbar__title,
+.brand__subtitle{
+  color: var(--accent-orange);
+}
+
+/* dark overlay when a background image is active */
+body.hasBg::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* keep app content above overlay */
+.topbar, .progressWrap, .gridHeader, .categoriesGrid, .backdrop, .modal { position: relative; z-index: 1; }
+
+.hidden { display: none !important; }
+
+
+/* ===== [CSS::SECTION B] Top Bar ===== */
+.topbar {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  padding: 14px 16px;
+
+  /* stronger header background + outline */
+  border-bottom: 2px solid rgba(255,122,0,0.35);
+  box-shadow: 0 10px 28px rgba(0,0,0,0.55);
+  background: rgba(8,8,10,0.92);
+}
+
+.brand__title {
+  font-size: 40px;
+  letter-spacing: 1px;
+  opacity: 1;
+  text-shadow: 0 0 1px rgba(0,0,0,0.9), 0 6px 18px rgba(0,0,0,0.55);
+}
+.brand__title span { opacity: 0.35; font-weight: 300; }
+#ownerName { opacity: 1; font-weight: 800; }
+.brand__subtitle { opacity: 0.85; margin-top: 2px; }
+
+.meta { display: grid; place-items: center; }
+.meta__stamp { color: #d8b9ff; font-weight: 700; }
+.meta__week { opacity: 0.65; margin-top: 4px; }
+
+.toolbar { text-align: right; }
+.toolbar__title {
+  opacity: 0.92;
+  margin-bottom: 10px;
+  text-shadow: 0 0 1px rgba(0,0,0,0.9), 0 6px 18px rgba(0,0,0,0.55);
+}
+.toolbar__buttons { display: inline-flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+
+
+/* ===== [CSS::SECTION C] Buttons ===== */
+.btn {
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.06);
+  color: #e9e9e9;
+  padding: 10px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  user-select: none;
+}
+.btn:hover { background: rgba(255,255,255,0.10); }
+.btn:active { transform: translateY(1px); }
+
+.btn--green { background: rgba(40,120,40,0.55); }
+.btn--amber { background: rgba(160,120,0,0.55); }
+.btn--red { background: rgba(160,0,0,0.55); }
+.btn--ghost { background: rgba(255,255,255,0.04); }
+
+/* [CSS::PART C-2] Tiny buttons (date controls) */
+.btn--tiny {
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+/* [CSS::PART C-3] Daily date controls */
+.dailyDateControls {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 8px;
+}
+
+.dailyDateInput {
+  width: 160px;
+  padding: 7px 8px;
+}
+
+/* ===== [CSS::SECTION D] Progress Area ===== */
+.progressWrap {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 10px;
+  padding: 10px 16px 0 16px;
+}
+
+.progressBlock {
+  border: 2px solid rgba(255,255,255,0.10);
+  padding: 12px;
+  background: rgba(0,0,0,0.35);
+  min-height: 160px;
+}
+
+.progressBlock__title {
+  font-size: 28px;
+  opacity: 0.85;
+  margin-bottom: 8px;
+}
+
+.progressRow {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  align-items: center;
+  gap: 10px;
+  margin: 8px 0;
+}
+.progressRow__label { opacity: 0.8; }
+
+/* Progress bar: black base + gradient fill that grows */
+.bar {
+  position: relative;
+  height: 16px;
+  border-radius: 3px;
+  background: rgba(0,0,0,0.85);
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.18);
+}
+
+.bar__fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0%;
+  background: linear-gradient(90deg, #8a0000, #ff7a00, #fff200, #3cff00);
+}
+
+.bar__text {
+  position: absolute;
+  right: 8px;
+  top: -2px;
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.bar--completed {
+  background: transparent;
+  border: 1px solid rgba(60,255,0,0.35);
+}
+.bar--completed .bar__fill { display: none; }
+.bar--completed .bar__text {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+  letter-spacing: 0.8px;
+  color: #3cff00;
+  font-size: 13px;
+}
+
+.categoryBars { margin-top: 10px; }
+
+/* ===== [CSS::SECTION E] Daily Panel ===== */
+.dailyPanel {
+  border: 2px solid rgba(255,255,255,0.10);
+  background: rgba(0,0,0,0.35);
+  padding: 12px;
+}
+.dailyPanel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.dailyPanel__title { font-size: 32px; color: #ff4747; }
+.dailyPanel__right { display: flex; align-items: center; gap: 10px; }
+.dailyPanel__date { opacity: 0.85; }
+.dailyList { display: grid; gap: 8px; }
+
+/* ===== [CSS::SECTION F] Grid ===== */
+.gridHeader {
+  padding: 10px 16px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.categoriesGrid {
+  padding: 0 16px 16px 16px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(280px, 1fr));
+  gap: 10px;
+}
+
+@media (max-width: 1100px) {
+  .progressWrap { grid-template-columns: 1fr; }
+  .categoriesGrid { grid-template-columns: repeat(2, minmax(280px, 1fr)); }
+}
+@media (max-width: 700px) {
+  .categoriesGrid { grid-template-columns: 1fr; }
+  .topbar { grid-template-columns: 1fr; }
+}
+
+/* ===== [CSS::SECTION G] Category Card ===== */
+.cat {
+  border: 2px solid rgba(255,255,255,0.10);
+  background: rgba(0,0,0,0.35);
+  padding: 12px;
+  min-height: 210px;
+}
+.cat__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.cat__title {
+  font-size: clamp(20px, 2.3vw, 34px);
+  opacity: 0.92;
+}
+.cat__tools { display: flex; gap: 8px; align-items: center; }
+.cat__add { color: #ffd84a; font-size: 18px; cursor: pointer; user-select: none; }
+.cat__del {
+  color: #ff6262;
+  font-size: 18px;
+  cursor: pointer;
+  user-select: none;
+  opacity: 0.9;
+}
+.cat__del.disabled { opacity: 0.25; cursor: not-allowed; }
+.cat__list { margin-top: 12px; display: grid; gap: 8px; }
+
+/* ===== [CSS::SECTION H] Task Row ===== */
+.task {
+  display: grid;
+  grid-template-columns: 18px 1fr 140px 18px; /* + deadline column */
+  gap: 10px;
+  align-items: center;
+}
+
+.task__status {
+  width: 16px;
+  height: 16px;
+  border: 1px solid rgba(255,255,255,0.28);
+  border-radius: 3px;
+  background: #0b0b0b;
+  cursor: pointer;
+}
+
+.task__text { opacity: 0.9; cursor: pointer; }
+
+.task__deadline{
+  width: 140px;
+  height: 28px;
+  padding: 2px 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(0,0,0,0.35);
+  color: rgba(255,255,255,0.85);
+  font-size: 12px;
+}
+
+.task__deadline::-webkit-calendar-picker-indicator{
+  opacity: 0.75;
+  cursor: pointer;
+}
+
+.task__remove {
+  width: 18px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 4px;
+  opacity: 0.75;
+  cursor: pointer;
+}
+.task__remove:hover { opacity: 1; }
+
+.task--hasSubs .task__text{
+  color: #6ad7ff;
+  font-weight: 700;
+}
+
+.status--black { background: #0b0b0b; }
+.status--green { background: #3cff00; }
+.status--yellow { background: #fff200; }
+.status--red { background: #ff1f1f; }
+
+/* ===== [CSS::SECTION I] Modal ===== */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  z-index: 50;
+}
+
+.modal {
+  position: fixed;
+  left: 50%;
+  top: 54%;
+  transform: translate(-50%, -50%);
+  width: min(620px, 92vw);
+  border: 2px solid rgba(255,255,255,0.12);
+  background: rgba(120,0,60,0.62);
+  z-index: 60;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+}
+.modal__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.14);
+}
+.modal__title { font-size: 20px; }
+.modal__content { padding: 12px; }
+.modal__actions { margin-bottom: 10px; }
+.subtaskList { display: grid; gap: 8px; }
+
+/* Options modal variant */
+.modal--options { background: rgba(20,20,20,0.92); }
+
+/* Small form layout */
+.formGrid { display: grid; gap: 12px; }
+.formRow { display: grid; gap: 6px; }
+.formRow__label { opacity: 0.9; font-size: 13px; }
+.formRow--inline { display: flex; align-items: center; gap: 10px; }
+
+/* [CSS::PART I-5] Inline button row (Options) */
+.inlineButtons {
+  display: inline-flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.input {
+  width: 100%;
+  padding: 10px 10px;
+  border-radius: 6px;
+  border: 1px solid rgba(255,255,255,0.16);
+  background: rgba(255,255,255,0.06);
+  color: #e9e9e9;
+}
+.input:focus {
+  outline: none;
+  border-color: rgba(255,255,255,0.28);
+}
+
+/* [CSS::PART I-3] Options actions split row */
+.modal__actions--split {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+/* [CSS::PART I-4] RMB context menu */
+.ctxMenu {
+  position: fixed;
+  z-index: 100;
+  min-width: 160px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.14);
+  background: rgba(20,20,20,0.95);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.55);
+  padding: 6px;
+}
+
+.ctxMenu__item {
+  padding: 10px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  user-select: none;
+  opacity: 0.95;
+}
+.ctxMenu__item:hover {
+  background: rgba(255,255,255,0.08);
+}
+.ctxMenu__item--danger:hover {
+  background: rgba(255,0,0,0.12);
+}

@@ -1,0 +1,179 @@
+<!-- =========================================================
+FILE: index.html
+PROJECT: Erlend 2026 Roadmap (Roadmap Simulator)
+ANCHOR SYSTEM: SECTION / PART
+========================================================= -->
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Erlend 2026 – Roadmap</title>
+
+  <!-- ===== [HTML::SECTION A] Styles / Meta ===== -->
+  <!-- [HTML::PART A-1] CSS link -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <!-- ===== [HTML::SECTION B] App Shell ===== -->
+  <!-- [HTML::PART B-1] Top bar -->
+  <header class="topbar">
+    <div class="topbar__left">
+      <div class="brand">
+        <div class="brand__title"><span id="ownerName">Name</span> <span>Roadmap</span></div>
+        <div class="brand__subtitle" id="simName">Erlend Simulator 2026</div>
+      </div>
+    </div>
+
+    <div class="topbar__center">
+      <div class="meta">
+        <div id="nowStamp" class="meta__stamp">01.01.26 01:01:01</div>
+        <div id="weekStamp" class="meta__week">Week # 1</div>
+      </div>
+    </div>
+
+    <div class="topbar__right">
+      <div class="toolbar">
+        <div class="toolbar__title" id="roadmapTitle">Erlend 2026</div>
+        <div class="toolbar__buttons">
+          <button id="btnOptions" class="btn btn--ghost">Options</button>
+          <button id="btnLoadRoadmap" class="btn btn--ghost">Load</button>
+          <button id="btnExportRoadmap" class="btn btn--ghost">Export</button>
+
+          <button id="btnNewRoadmap" class="btn btn--green">New</button>
+          <button id="btnRenameRoadmap" class="btn btn--amber">Rename</button>
+          <button id="btnResetAll" class="btn btn--red">Delete</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== [HTML::SECTION C] Progress Bars ===== -->
+  <!-- [HTML::PART C-1] Progress area -->
+  <section class="progressWrap">
+    <div class="progressBlock">
+      <div class="progressBlock__title">Progress</div>
+
+      <div class="progressRow">
+        <div class="progressRow__label">Overall progress</div>
+        <div class="bar">
+          <div class="bar__fill" id="barOverall"></div>
+          <div class="bar__text" id="barOverallText">0%</div>
+        </div>
+      </div>
+
+      <div id="categoryBars" class="categoryBars"></div>
+    </div>
+
+    <!-- Daily panel -->
+    <div class="dailyPanel">
+      <div class="dailyPanel__header">
+        <div class="dailyPanel__title">Daily</div>
+
+        <div class="dailyPanel__right">
+          <div class="dailyPanel__date">
+            Date
+            <div class="dailyDateControls">
+              <button id="btnDayPrev" class="btn btn--ghost btn--tiny" title="Previous day">◀</button>
+              <input id="dailyDate" type="date" class="input dailyDateInput" />
+              <button id="btnDayNext" class="btn btn--ghost btn--tiny" title="Next day">▶</button>
+              <button id="btnDayToday" class="btn btn--ghost btn--tiny" title="Jump to today">Today</button>
+            </div>
+          </div>
+
+          <button id="btnAddDailyTask" class="btn btn--ghost">+ Add tasks</button>
+        </div>
+      </div>
+
+      <div id="dailyList" class="dailyList"></div>
+    </div>
+  </section>
+
+  <!-- ===== [HTML::SECTION D] Categories Grid ===== -->
+  <section class="gridHeader">
+    <button id="btnAddCategory" class="btn btn--ghost">+ Add category</button>
+  </section>
+
+  <main id="categoriesGrid" class="categoriesGrid"></main>
+
+  <!-- ===== [HTML::SECTION E] Modals & Inputs ===== -->
+  <div id="backdrop" class="backdrop hidden"></div>
+
+  <!-- Subtasks modal -->
+  <div id="subtaskModal" class="modal hidden" role="dialog" aria-modal="true" aria-label="Subtasks">
+    <div class="modal__header">
+      <div class="modal__title" id="subtaskModalTitle">Task</div>
+      <button id="btnCloseModal" class="btn btn--ghost">Close</button>
+    </div>
+
+    <div class="modal__content">
+      <div class="modal__actions">
+        <button id="btnAddSubtask" class="btn btn--ghost">+ Add sub-task</button>
+      </div>
+
+      <div id="subtaskList" class="subtaskList"></div>
+    </div>
+  </div>
+
+  <!-- Hidden file input for Load -->
+  <input id="fileLoader" type="file" accept="application/json" class="hidden" />
+
+  <!-- Hidden file input for Background image upload -->
+  <input id="bgLoader" type="file" accept="image/*" class="hidden" />
+
+  <!-- Options modal -->
+  <!-- [HTML::PART E-1] Options modal -->
+  <div id="optionsModal" class="modal modal--options hidden" role="dialog" aria-modal="true" aria-label="Options">
+    <div class="modal__header">
+      <div class="modal__title">Options</div>
+      <button id="btnCloseOptions" class="btn btn--ghost">Close</button>
+    </div>
+
+    <div class="modal__content">
+      <div class="formGrid">
+        <label class="formRow">
+          <div class="formRow__label">Roadmap title</div>
+          <input id="optRoadmapTitle" class="input" placeholder="Erlend 2026" />
+        </label>
+
+        <label class="formRow">
+          <div class="formRow__label">Owner name (left title)</div>
+          <input id="optOwnerName" class="input" placeholder="Erlend" />
+        </label>
+
+        <label class="formRow">
+          <div class="formRow__label">Simulator name (subtitle)</div>
+          <input id="optSimName" class="input" placeholder="Erlend Simulator 2026" />
+        </label>
+
+        <label class="formRow formRow--inline">
+          <input id="optBrightMode" type="checkbox" />
+          <div class="formRow__label">Bright mode (placeholder)</div>
+        </label>
+
+        <div class="formRow">
+          <div class="formRow__label">Background image</div>
+          <div class="inlineButtons">
+            <button id="btnBgExample" class="btn btn--ghost" title="Use a built-in example background">Use example</button>
+            <button id="btnBgUpload" class="btn btn--ghost" title="Upload an image from your computer">Upload…</button>
+            <button id="btnBgClear" class="btn btn--ghost" title="Clear background image">Clear</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal__actions modal__actions--split">
+        <button id="btnClearDailyLog" class="btn btn--red" title="Clears all stored daily checkmarks for all dates">
+          Clear Daily task records
+        </button>
+
+        <button id="btnSaveOptions" class="btn btn--green">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== [HTML::SECTION F] Scripts ===== -->
+  <script src="app.js"></script>
+</body>
+</html>
